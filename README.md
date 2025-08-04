@@ -16,9 +16,9 @@ This project is a Fraud Detection System designed to identify potentially fraudu
 
 The system is built for financial institutions and fintechs to detect and understand fraud effectively.
 
-## DATA UNDERSTANDING AND PROCESSING
+##
 
-### Data Understanding
+## DATA UNDERSTANDING AND PROCESSING
 
 EDA was carried out on the data and these are the following insights:
 
@@ -46,6 +46,8 @@ EDA was carried out on the data and these are the following insights:
 - The transaction_time feature was converted into datetime format using pd.to_datetime() function.
 - the transaction_time was then used to validate the time_of_day and day_of_week features. This showed that the time_of_day and day_of_week features were not consistent with the transaction_time feature. Therefore, the time_of_day and day_of_week features were modified using the transaction_time feature.
 
+##
+
 ## FEATURE ENGINEERING
 
 The following categorical columns were converted to numerical columns using one hot encoding:
@@ -66,6 +68,8 @@ risk_score was not modified as it is an already scaled numerical feature.
 transaction_id, customer_id, and transaction_time were dropped as they are not relevant to the model.
 
 is_high_risk_country and is_foreign_transaction were combined into a single feature called is_high_risk_transaction. This was done because during EDA I notice transactions that is_high_risk_country and is_foreign_transaction are most likely to be fraud. so this combination acts like a risk level feature to the model by combining the two models using the logical or (+) operator.
+
+##
 
 ## MODELING SELECTION AND TRAINING STRATEGY
 
