@@ -73,12 +73,12 @@ EDA was carried out on the data and these are the following insights:
 Here are the results of the temporal analysis:
 
 - Nights and mornings have the highest risk case of fraud transactions while evenings have the lowest risk case of fraud transactions.
-  ![FRAUD COUNT BY TIME OF DAY](images/image-1.png)
+  ![FRAUD COUNT BY TIME OF DAY](utils/images/image-1.png)
 - Sundays and thursdays have the highest risk case of fraud transactions while fridays have the lowest risk case of fraud transactions.
-  ![FRAUD COUNT BY DAY OF WEEK](images/image.png)
+  ![FRAUD COUNT BY DAY OF WEEK](utils/images/image.png)
 - There were no trends of fraud transactions with respect to weekend or weekdays.
 - There were no trends of fraud transactions with respect to hour of the day.
-  ![FRAUD COUNT BY HOUR OF DAY](images/image-2.png)
+  ![FRAUD COUNT BY HOUR OF DAY](utils/images/image-2.png)
 
 ##
 
@@ -102,7 +102,7 @@ risk_score was not modified as it is an already scaled numerical feature.
 transaction_id, customer_id, and transaction_time were dropped as they are not relevant to the model.
 
 is_high_risk_country and is_foreign_transaction were combined into a single feature called is_high_risk_transaction. This was done because during EDA I notice transactions that is_high_risk_country and is_foreign_transaction are most likely to be fraud. so this combination acts like a risk level feature to the model by combining the two models using the logical or (+) operator.
-![alt text](images/image-3.png) ![alt text](images/image-4.png)
+![alt text](utils/images/image-3.png) ![alt text](utils/images/image-4.png)
 
 ##
 
@@ -110,7 +110,7 @@ is_high_risk_country and is_foreign_transaction were combined into a single feat
 
 The dataset is imbalanced with a fraud rate of 17.1%.
 
-![alt text](images/image-6.png)
+![alt text](utils/images/image-6.png)
 
 This is a common problem in fraud detection. To handle this, SMOTEENN whcih is a combination of SMOTE (Synthetic Minority Over-sampling Technique) and ENN (Edited Nearest Neighbors) was used to oversample the minority class and undersample the majority class.
 this method was selected because:
@@ -126,7 +126,7 @@ this method was selected because:
 
 The model used for this project is XGBoost. This was chosen because it is a powerful and flexible algorithm that can handle complex relationships between features and the target variable. It also has built-in support for handling imbalanced datasets, which is a common problem in fraud detection. It has high performance on tabular data, Compatibility with SHAP for explainability and Compatibility with SHAP for explainability.
 
-![alt text](images/image-7.png)
+![alt text](utils/images/image-7.png)
 
 ### Training strategy
 
@@ -168,3 +168,78 @@ AUC-ROC: 1.0
 ```
 
 ##
+
+## EXPLAINABILITY INSIGHTS
+
+To understand the model's predictions, SHAP (SHapley Additive exPlanations) values were used to quantify the contribution of each feature. The summary plot below reveals the following key insights:
+![alt text](utils/images/image-8.png)
+
+### Key Findings
+
+- foreign_or_high_risk is the most influential feature, indicating that transactions from flagged countries or high-risk regions strongly influence fraud predictions.
+
+- transaction_amount and risk_score are equally impactful, suggesting that larger transaction values and elevated risk scores are major signals for fraudulent activity.
+
+- transaction_type_Online has a higher influence compared to POS, implying online transactions carry a higher fraud risk in the dataset.
+
+- Time-based features like day_sin and time_sin show that the model captures temporal fraud patterns—certain hours or days may be more prone to fraudulent activity.
+
+- contributes meaningfully, showing that accounts with a fraud history are more likely to be flagged.
+
+- Location-specific behavior, such as transactions from Port Harcourt, also appears relevant.
+
+- While individually smaller, the collective effect of 14 other features contributes significantly to the model's decisions.
+
+This level of explainability helps validate that the model is aligning with domain knowledge and highlights which features are most actionable for risk teams.
+
+##
+
+## DEPLOYMENT INSTRUCTIONS
+
+**Clone the Repository**
+
+```bash
+git clone https://github.com/Chigoziee/QAT-Ed.git
+cd QAT-Ed
+```
+
+**Create Virtual Environment**
+
+```bash
+ python -m venv .venv
+ source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+```
+
+**Install Dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+### **Run Streamlit App**
+
+```bash
+streamlit run streamlit_app.py
+```
+
+The app allows:
+
+- Manual input of transaction data
+
+- Viewing fraud predictions and risk - explanations
+
+- Monitoring daily fraud trends
+
+### **Run FastAPI Server**
+
+```bash
+uvicorn api_server:app --reload
+```
+
+The FastAPI server will be accessible at http://localhost:8000 for testing and Swagger documentation.
+
+The API:
+
+- Accepts transaction JSON payloads
+
+- Returns fraud predictions and SHAP explanations
