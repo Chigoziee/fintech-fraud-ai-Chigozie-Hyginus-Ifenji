@@ -30,21 +30,55 @@ EDA was carried out on the data and these are the following insights:
 - Dataset had fraud cases: 171 and non-fraud cases: 829
 - Database has 2 numerical features, 1 datetime feature and 10 categorical features
 - The non binary categorical features include:
-  - transaction_type: 4 classes - ['Online' 'POS' 'ATM' 'Transfer']
-  - device_type: 4 classes - ['Mobile' 'ATM Machine' 'POS Terminal' 'Web']
-  - location: 5 classes - ['Abuja' 'Lagos' 'Ibadan' 'Kano' 'Port Harcourt']
-  - time_of_day: 4 classes - ['Afternoon' 'Evening' 'Morning' 'Night']
-  - day_of_week: 7 classes - ['Fri' 'Tue' 'Wed' 'Sun' 'Thu' 'Mon' 'Sat']
+
+```
+    transaction_type: 4 classes - ['Online' 'POS' 'ATM' 'Transfer']
+    device_type: 4 classes - ['Mobile' 'ATM Machine' 'POS Terminal' 'Web']
+    location: 5 classes - ['Abuja' 'Lagos' 'Ibadan' 'Kano' 'Port Harcourt']
+    time_of_day: 4 classes - ['Afternoon' 'Evening' 'Morning' 'Night']
+    day_of_week: 7 classes - ['Fri' 'Tue' 'Wed' 'Sun' 'Thu' 'Mon' 'Sat']
+```
+
 - The binary categorical features include:
-  - is_foreign_transaction: 2 classes - [0 1]
-  - is_high_risk_country: 2 classes - [0 1]
-  - previous_fraud_flag: 2 classes - [0 1]
-- customer_id and transaction_id are unique identifiers for each transaction with > 100 different classes
+
+```
+    is_foreign_transaction: 2 classes - [0 1]
+    is_high_risk_country: 2 classes - [0 1]
+    previous_fraud_flag: 2 classes - [0 1]
+```
+
+- customer_id and transaction_id had more than 100 different classes
 
 ### Data Preprocessing
 
 - The transaction_time feature was converted into datetime format using pd.to_datetime() function.
 - the transaction_time was then used to validate the time_of_day and day_of_week features. This showed that the time_of_day and day_of_week features were not consistent with the transaction_time feature. Therefore, the time_of_day and day_of_week features were modified using the transaction_time feature.
+
+```
+    Timestamp: 2024-02-04 22:00:00
+
+    Day of the week from timestamp: Sun
+    Day of week from dataFrame: Fri
+    Validity: False
+
+    Time of day from timestamp: Night
+    Time of day from dataframe: Afternoon
+    Validity: False
+```
+
+##
+
+## TEMPORAL ANALYSIS RESULTS
+
+Here are the results of the temporal analysis:
+
+- Nights and mornings have the highest risk case of fraud transactions while evenings have the lowest risk case of fraud transactions.
+  ![FRAUD COUNT BY TIME OF DAY](image-1.png)
+- Sundays and thursdays have the highest risk case of fraud transactions while fridays have the lowest risk case of fraud transactions.
+  ![FRAUD COUNT BY DAY OF WEEK](image.png)
+- There were no trends of fraud transactions with respect to weekend or weekdays.
+- There were no trends of fraud transactions with respect to hour of the day.
+  ![FRAUD COUNT BY HOUR OF DAY](image-2.png)
 
 ##
 
@@ -68,6 +102,23 @@ risk_score was not modified as it is an already scaled numerical feature.
 transaction_id, customer_id, and transaction_time were dropped as they are not relevant to the model.
 
 is_high_risk_country and is_foreign_transaction were combined into a single feature called is_high_risk_transaction. This was done because during EDA I notice transactions that is_high_risk_country and is_foreign_transaction are most likely to be fraud. so this combination acts like a risk level feature to the model by combining the two models using the logical or (+) operator.
+![alt text](image-3.png) ![alt text](image-4.png)
+
+##
+
+## DATA IMBALANCE HANDLING
+
+The dataset is imbalanced with a fraud rate of 17.1%.
+
+![alt text](image-6.png)
+
+This is a common problem in fraud detection. To handle this, SMOTEENN whcih is a combination of SMOTE (Synthetic Minority Over-sampling Technique) and ENN (Edited Nearest Neighbors) was used to oversample the minority class and undersample the majority class.
+this method was selected because:
+
+- I want cleaner decision boundaries by removing confusing majority samples.
+- You're dealing with moderate-to-severe class imbalance (17%).
+- it works best for this use case case (fraud detection).
+- I'm using complex models (XGBoost) that benefit from more refined class separation.
 
 ##
 
@@ -75,14 +126,45 @@ is_high_risk_country and is_foreign_transaction were combined into a single feat
 
 The model used for this project is XGBoost. This was chosen because it is a powerful and flexible algorithm that can handle complex relationships between features and the target variable. It also has built-in support for handling imbalanced datasets, which is a common problem in fraud detection. It has high performance on tabular data, Compatibility with SHAP for explainability and Compatibility with SHAP for explainability.
 
+![alt text](image-7.png)
+
 ### Training strategy
 
 - The dataset was split into train and test sets with a 80/20 split.
 - The model was trained on the train set and evaluated on the test set.
 - The model was trained with the following hyperparameters:
-  - n_estimators = 200
-  - learning_rate = 0.1
-  - max_depth = 6
-  - subsample = 0.8
-  - colsample_bytree = 0.8
-  - eval_metric = 'logloss'
+
+```
+    n_estimators = 200
+    learning_rate = 0.1
+    max_depth = 6
+    subsample = 0.8
+    colsample_bytree = 0.8
+    eval_metric = 'logloss'
+```
+
+### MODEL EVALUATION
+
+The model was evaluated using the following metrics:
+
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- AUC-ROC
+
+This wa sthe model's confusion matrix:
+
+```
+[[166   0]
+ [  0  34]]
+
+TP: 166, FP: 0, TN: 34, FN: 0
+
+Precision: 1.0
+Recall: 1.0
+F1-score: 1.0
+AUC-ROC: 1.0
+```
+
+##
