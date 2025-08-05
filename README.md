@@ -89,11 +89,11 @@ The following categorical columns were converted to numerical columns using one 
 - transaction_type
 - device_type
 - location
-  this was because they have 4-5 classes which where unrealed to one another
+  this was because they have 4-5 classes which where unrelated to one another
 
 time_of_day and day_of_week features were converted to numerical columns using cyclical encoding because these features are cyclic in nature and the models need to understand this relationship (i.e monday is close to sunday and far from thursday)
 
-The transaction_amount featurewas scaled using RobustScaler beacsue of the skewness of the data. this feature had a mean = 72.595107, std = 73.350547, and max = 608.378011.
+The transaction_amount feature was scaled using RobustScaler beacsue of the skewness of the data. this feature had a mean = 72.595107, std = 73.350547, and max = 608.378011.
 
 is_high_risk_country, is_foreign_transaction, previous_fraud_flag, and label_code were not modified as they are binary features.
 
@@ -113,7 +113,7 @@ The dataset is imbalanced with a fraud rate of 17.1%.
 ![alt text](utils/images/image-6.png)
 
 This is a common problem in fraud detection. To handle this, SMOTEENN whcih is a combination of SMOTE (Synthetic Minority Over-sampling Technique) and ENN (Edited Nearest Neighbors) was used to oversample the minority class and undersample the majority class.
-this method was selected because:
+This method was selected because:
 
 - I want cleaner decision boundaries by removing confusing majority samples.
 - You're dealing with moderate-to-severe class imbalance (17%).
@@ -124,7 +124,7 @@ this method was selected because:
 
 ## MODELING SELECTION AND TRAINING STRATEGY
 
-The model used for this project is XGBoost. This was chosen because it is a powerful and flexible algorithm that can handle complex relationships between features and the target variable. It also has built-in support for handling imbalanced datasets, which is a common problem in fraud detection. It has high performance on tabular data, Compatibility with SHAP for explainability and Compatibility with SHAP for explainability.
+The model used for this project is XGBoost. This was chosen because it is a powerful and flexible algorithm that can handle complex relationships between features and the target variable. It also has built-in support for handling imbalanced datasets, which is a common problem in fraud detection. It performs well on tabular data and integrates seamlessly with SHAP for explainability
 
 ![alt text](utils/images/image-7.png)
 
@@ -153,7 +153,7 @@ The model was evaluated using the following metrics:
 - F1-score
 - AUC-ROC
 
-This wa sthe model's confusion matrix:
+The model's confusion matrix and metrics are shown below.
 
 ```
 [[166   0]
@@ -161,6 +161,7 @@ This wa sthe model's confusion matrix:
 
 TP: 166, FP: 0, TN: 34, FN: 0
 
+Accuracy: 1.0
 Precision: 1.0
 Recall: 1.0
 F1-score: 1.0
@@ -186,7 +187,7 @@ To understand the model's predictions, SHAP (SHapley Additive exPlanations) valu
 
 - Time-based features like day_sin and time_sin show that the model captures temporal fraud patterns—certain hours or days may be more prone to fraudulent activity.
 
-- contributes meaningfully, showing that accounts with a fraud history are more likely to be flagged.
+- previous_fraud_flag contributes meaningfully, showing that accounts with a fraud history are more likely to be flagged.
 
 - Location-specific behavior, such as transactions from Port Harcourt, also appears relevant.
 
