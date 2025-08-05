@@ -167,6 +167,8 @@ F1-score: 1.0
 AUC-ROC: 1.0
 ```
 
+![alt text](utils/images/image-9.png)
+
 ##
 
 ## EXPLAINABILITY INSIGHTS
@@ -241,5 +243,46 @@ The FastAPI server will be accessible at http://localhost:8000 for testing and S
 The API:
 
 - Accepts transaction JSON payloads
-
 - Returns fraud predictions and SHAP explanations
+
+##
+
+## ASSUMPTIONS AND LIMITATIONS
+
+- The system only takes in data consistent with the training data schema.
+
+- The system is limited to static model; retraining requires manual updates.
+
+- Model performance may degrade on unseen patterns or evolving fraud techniques due to lack of continuous monitoring and updating.
+
+- Categorical values outside the fitted encoder’s vocabulary are ignored.
+
+## FUTURE IMPROVEMENTS
+
+To enhance the system's versitility, performance, and usability, the following improvements are proposed:
+
+### Model Enhancements
+
+- Explore advanced models like LightGBM, CatBoost, or ensemble stacking.
+
+- Add anomaly detection (e.g., Isolation Forest, Autoencoders).
+
+- Implement online/incremental learning for real-time adaptation.
+
+### Data
+
+- Include user behavior metrics (avg transaction size, frequency).
+
+- Automate data ingestion, preprocessing, and retraining.
+
+- Integrate real-time data streams (e.g., Kafka) for live scoring.
+
+### Dashboard/API Improvements
+
+- Add user authentication and secure access.
+
+- Show historical risk trends and enable batch scoring via CSV.
+
+- Add real-time evaluation using recent transaction data.
+
+- Deploy on cloud platforms for availability and monitoring.
