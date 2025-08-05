@@ -73,12 +73,12 @@ EDA was carried out on the data and these are the following insights:
 Here are the results of the temporal analysis:
 
 - Nights and mornings have the highest risk case of fraud transactions while evenings have the lowest risk case of fraud transactions.
-  ![FRAUD COUNT BY TIME OF DAY](image-1.png)
+  ![FRAUD COUNT BY TIME OF DAY](images/image-1.png)
 - Sundays and thursdays have the highest risk case of fraud transactions while fridays have the lowest risk case of fraud transactions.
-  ![FRAUD COUNT BY DAY OF WEEK](image.png)
+  ![FRAUD COUNT BY DAY OF WEEK](images/image.png)
 - There were no trends of fraud transactions with respect to weekend or weekdays.
 - There were no trends of fraud transactions with respect to hour of the day.
-  ![FRAUD COUNT BY HOUR OF DAY](image-2.png)
+  ![FRAUD COUNT BY HOUR OF DAY](images/image-2.png)
 
 ##
 
@@ -102,7 +102,7 @@ risk_score was not modified as it is an already scaled numerical feature.
 transaction_id, customer_id, and transaction_time were dropped as they are not relevant to the model.
 
 is_high_risk_country and is_foreign_transaction were combined into a single feature called is_high_risk_transaction. This was done because during EDA I notice transactions that is_high_risk_country and is_foreign_transaction are most likely to be fraud. so this combination acts like a risk level feature to the model by combining the two models using the logical or (+) operator.
-![alt text](image-3.png) ![alt text](image-4.png)
+![alt text](images/image-3.png) ![alt text](images/image-4.png)
 
 ##
 
@@ -110,7 +110,7 @@ is_high_risk_country and is_foreign_transaction were combined into a single feat
 
 The dataset is imbalanced with a fraud rate of 17.1%.
 
-![alt text](image-6.png)
+![alt text](images/image-6.png)
 
 This is a common problem in fraud detection. To handle this, SMOTEENN whcih is a combination of SMOTE (Synthetic Minority Over-sampling Technique) and ENN (Edited Nearest Neighbors) was used to oversample the minority class and undersample the majority class.
 this method was selected because:
@@ -126,7 +126,7 @@ this method was selected because:
 
 The model used for this project is XGBoost. This was chosen because it is a powerful and flexible algorithm that can handle complex relationships between features and the target variable. It also has built-in support for handling imbalanced datasets, which is a common problem in fraud detection. It has high performance on tabular data, Compatibility with SHAP for explainability and Compatibility with SHAP for explainability.
 
-![alt text](image-7.png)
+![alt text](images/image-7.png)
 
 ### Training strategy
 
