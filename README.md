@@ -73,11 +73,16 @@ EDA was carried out on the data and these are the following insights:
 Here are the results of the temporal analysis:
 
 - Nights and mornings have the highest risk case of fraud transactions while evenings have the lowest risk case of fraud transactions.
+
   ![FRAUD COUNT BY TIME OF DAY](utils/images/image-1.png)
+
 - Sundays and thursdays have the highest risk case of fraud transactions while fridays have the lowest risk case of fraud transactions.
+
   ![FRAUD COUNT BY DAY OF WEEK](utils/images/image.png)
+
 - There were no trends of fraud transactions with respect to weekend or weekdays.
 - There were no trends of fraud transactions with respect to hour of the day.
+
   ![FRAUD COUNT BY HOUR OF DAY](utils/images/image-2.png)
 
 ##
@@ -93,7 +98,7 @@ The following categorical columns were converted to numerical columns using one 
 
 time_of_day and day_of_week features were converted to numerical columns using cyclical encoding because these features are cyclic in nature and the models need to understand this relationship (i.e monday is close to sunday and far from thursday)
 
-The transaction_amount feature was scaled using RobustScaler beacsue of the skewness of the data. this feature had a mean = 72.595107, std = 73.350547, and max = 608.378011.
+The transaction_amount feature was scaled using RobustScaler because of the skewness of the data. this feature had a mean = 72.595107, std = 73.350547, min = -17.066703, and max = 608.378011.
 
 is_high_risk_country, is_foreign_transaction, previous_fraud_flag, and label_code were not modified as they are binary features.
 
@@ -101,7 +106,8 @@ risk_score was not modified as it is an already scaled numerical feature.
 
 transaction_id, customer_id, and transaction_time were dropped as they are not relevant to the model.
 
-is_high_risk_country and is_foreign_transaction were combined into a single feature called is_high_risk_transaction. This was done because during EDA I notice transactions that is_high_risk_country and is_foreign_transaction are most likely to be fraud. so this combination acts like a risk level feature to the model by combining the two models using the logical or (+) operator.
+is_high_risk_country and is_foreign_transaction were combined into a new feature called is_high_risk_transaction. This was done because during EDA I notice transactions that is_high_risk_country or is_foreign_transaction are most likely to be fraud. This combination acts like a risk level feature to the model by combining the two models using the logical or (+) operator.
+
 ![alt text](utils/images/image-3.png) ![alt text](utils/images/image-4.png)
 
 ##
@@ -175,6 +181,7 @@ AUC-ROC: 1.0
 ## EXPLAINABILITY INSIGHTS
 
 To understand the model's predictions, SHAP (SHapley Additive exPlanations) values were used to quantify the contribution of each feature. The summary plot below reveals the following key insights:
+
 ![alt text](utils/images/image-8.png)
 
 ### Key Findings
@@ -210,7 +217,7 @@ cd QAT-Ed
 
 ```bash
  python -m venv .venv
- source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+ source .venv/bin/activate  # or .venv\Scripts\activate on Windows powershell
 ```
 
 **Install Dependencies**

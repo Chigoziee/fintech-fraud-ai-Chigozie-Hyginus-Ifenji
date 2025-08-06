@@ -1,10 +1,11 @@
 pandas==2.3.1
 seaborn==0.13.2
 openpyxl==3.1.5
-scikit-learn==1.7.1
+scikit-learn==1.6.1
 imbalanced-learn==0.13.0
 xgboost==3.0.3
 uvicorn==0.35.0
 fastapi==0.116.1
 pydantic==2.11.7
-shap==0.48.1
+shap==0.48.0
+streamlit==1.47.1
