@@ -89,7 +89,7 @@ The following categorical columns were converted to numerical columns using one 
 - transaction_type
 - device_type
 - location
-  this was because they have 4-5 classes which where unrelated to one another
+  This was because they have 4-5 classes which where unrelated to one another
 
 time_of_day and day_of_week features were converted to numerical columns using cyclical encoding because these features are cyclic in nature and the models need to understand this relationship (i.e monday is close to sunday and far from thursday)
 
@@ -116,7 +116,7 @@ This is a common problem in fraud detection. To handle this, SMOTEENN whcih is a
 This method was selected because:
 
 - I want cleaner decision boundaries by removing confusing majority samples.
-- You're dealing with moderate-to-severe class imbalance (17%).
+- I'm dealing with moderate-to-severe class imbalance (17%).
 - it works best for this use case case (fraud detection).
 - I'm using complex models (XGBoost) that benefit from more refined class separation.
 
@@ -225,13 +225,18 @@ pip install -r requirements.txt
 streamlit run streamlit_app.py
 ```
 
+The app will be accessible at http://localhost:8501
+![alt text](utils/images/image11.png)
+
 The app allows:
 
 - Manual input of transaction data
 
 - Viewing fraud predictions and risk - explanations
 
-- Monitoring daily fraud trends
+- Monitoring weekly fraud trends
+
+![alt text](utils/images/image-10.png)
 
 ### **Run FastAPI Server**
 
@@ -241,10 +246,78 @@ uvicorn api_server:app --reload
 
 The FastAPI server will be accessible at http://localhost:8000 for testing and Swagger documentation.
 
-The API:
+**The predict endpoint**
 
-- Accepts transaction JSON payloads
-- Returns fraud predictions and SHAP explanations
+```bash
+http://localhost:8000/predict
+```
+
+**Sample payload**
+
+```json
+{
+  "transaction_amount": 12.33,
+  "transaction_type": "Online",
+  "device_type": "Web",
+  "location": "Port Harcourt",
+  "is_foreign_transaction": 1,
+  "is_high_risk_country": 0,
+  "previous_fraud_flag": 0,
+  "risk_score": 1.2332,
+  "transaction_time": "2025-07-10 17:00:21"
+}
+```
+
+**cURL command**
+
+```bash
+curl --location 'localhost:8000/predict' \
+--header 'Content-Type: application/json' \
+--data '{
+    "transaction_amount": 12.33,
+    "transaction_type": "Online",
+    "device_type": "Web",
+    "location": "Port Harcourt",
+    "is_foreign_transaction": 1,
+    "is_high_risk_country": 0,
+    "previous_fraud_flag": 0,
+    "risk_score": 1.2332,
+    "transaction_time": "2025-07-10 17:00:21"
+}'
+```
+
+**Response**
+
+```json
+{
+  "prediction": "1",
+  "explanation": {
+    "transaction_amount": 1.0228219032287598,
+    "is_foreign_transaction": 0.6744084358215332,
+    "is_high_risk_country": -0.043741628527641296,
+    "previous_fraud_flag": -0.09886821359395981,
+    "risk_score": 1.1923465728759766,
+    "transaction_type_ATM": 0.0021069394424557686,
+    "transaction_type_Online": 0.36210569739341736,
+    "transaction_type_POS": -0.24908991158008575,
+    "transaction_type_Transfer": -0.006103517487645149,
+    "location_Abuja": -0.1782943606376648,
+    "location_Ibadan": -0.0013660620898008347,
+    "location_Kano": -0.07570569962263107,
+    "location_Lagos": -0.026670582592487335,
+    "location_Port Harcourt": 0.28420910239219666,
+    "device_type_ATM Machine": -0.049883268773555756,
+    "device_type_Mobile": -0.01738744229078293,
+    "device_type_POS Terminal": -0.04770349711179733,
+    "device_type_Web": -0.0006416961550712585,
+    "time_sin": -0.17399750649929047,
+    "time_cos": -0.09563319385051727,
+    "day_sin": 0.6881362795829773,
+    "day_cos": -0.17459282279014587,
+    "foreign_or_high_risk": 4.545841693878174
+  }
+}
+```
 
 ##
 
@@ -257,6 +330,7 @@ The API:
 - Model performance may degrade on unseen patterns or evolving fraud techniques due to lack of continuous monitoring and updating.
 
 - Categorical values outside the fitted encoder’s vocabulary are ignored.
+- The weekly fraud trend is based on the data provided.
 
 ## FUTURE IMPROVEMENTS
 
@@ -282,7 +356,7 @@ To enhance the system's versitility, performance, and usability, the following i
 
 - Add user authentication and secure access.
 
-- Show historical risk trends and enable batch scoring via CSV.
+- Show historical risk trends based on recent transactions and enable batch scoring via CSV.
 
 - Add real-time evaluation using recent transaction data.
 
