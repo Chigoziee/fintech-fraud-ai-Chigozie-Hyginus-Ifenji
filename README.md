@@ -209,8 +209,8 @@ This level of explainability helps validate that the model is aligning with doma
 **Clone the Repository**
 
 ```bash
-git clone https://github.com/Chigoziee/QAT-Ed.git
-cd QAT-Ed
+git https://github.com/Chigoziee/fintech-fraud-ai-Chigozie-Hyginus-Ifenji.git
+cd fintech-fraud-ai-Chigozie-Hyginus-Ifenji
 ```
 
 **Create Virtual Environment**
